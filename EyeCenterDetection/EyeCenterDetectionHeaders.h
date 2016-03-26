@@ -32,6 +32,20 @@ public:
 	void drawFaceOnImage(Mat, vector<Rect>);
 };
 
+class EyeDetection
+{
+	CascadeClassifier leftEyeDetector;
+	CascadeClassifier rightEyeDetector;
+	float EYE_SX, EYE_SY, EYE_SH, EYE_SW;
+
+public:
+	EyeDetection();
+	vector<Rect> storeLeftEyePos(Mat);
+	vector<Rect> storeRightEyePos(Mat);
+	void drawLeftEyeOnImage(Mat, Rect, vector<Rect>);
+	void drawRightEyeOnImage(Mat, Rect, vector<Rect>);
+};
+
 class ImageProcessingMethods
 {
 public:
@@ -43,6 +57,7 @@ void detectInImage(Mat);
 
 //Global Variables
 extern FaceDetection faceDetection;
+extern EyeDetection eyeDetection;
 extern ImageProcessingMethods imageProcessingMethods;
 
 #endif

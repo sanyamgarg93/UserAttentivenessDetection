@@ -2,6 +2,7 @@
 
 //Classes instantiated globally because methods called repetitively inside main loop.
 FaceDetection faceDetection;
+EyeDetection eyeDetection;
 ImageProcessingMethods imageProcessingMethods;
 
 int main()
