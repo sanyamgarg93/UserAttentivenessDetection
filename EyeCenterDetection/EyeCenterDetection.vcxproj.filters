@@ -21,9 +21,18 @@
     <ClCompile Include="FaceDetection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="detectInImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageProcessingMethods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EyeCenterDetectionHeaders.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

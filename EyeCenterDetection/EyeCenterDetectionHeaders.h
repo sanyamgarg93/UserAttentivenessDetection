@@ -16,9 +16,11 @@
 #include<opencv2\objdetect.hpp>
 #include<opencv2\imgproc.hpp>
 
+//Namespaces
 using namespace std;
 using namespace cv;
 
+//Classes
 class FaceDetection
 {
 	CascadeClassifier frontalFaceDetector;
@@ -29,5 +31,18 @@ public:
 	vector<Rect> storeFrontalFacePos(Mat);
 	void drawFaceOnImage(Mat, vector<Rect>);
 };
+
+class ImageProcessingMethods
+{
+public:
+	Mat sizeReduce(Mat, int);
+};
+
+//Methods
+void detectInImage(Mat);
+
+//Global Variables
+extern FaceDetection faceDetection;
+extern ImageProcessingMethods imageProcessingMethods;
 
 #endif

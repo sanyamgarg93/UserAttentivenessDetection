@@ -1,5 +1,9 @@
 #include "EyeCenterDetectionHeaders.h"
 
+//Classes instantiated globally because methods called repetitively inside main loop.
+FaceDetection faceDetection;
+ImageProcessingMethods imageProcessingMethods;
+
 int main()
 {
 	VideoCapture capture(0);
@@ -9,20 +13,17 @@ int main()
 		cin.get();
 	}
 
-	FaceDetection faceDetection;
 	Mat frame;
 
-	while (1)
+	while (true)
 	{
-		if (!capture.read(frame))
+		if (!capture.read(frame)) 
 		{
 			cout << "Frames not found [Frame Capture Error]" << endl;
 			break;
 		}
 
-		vector<Rect> frontalFaces = faceDetection.storeFrontalFacePos(frame);
-		faceDetection.drawFaceOnImage(frame, frontalFaces);
-		
+		detectInImage(frame);		
 		imshow("Output", frame);
 
 		if (waitKey(10) == 27)
