@@ -19,4 +19,15 @@
 using namespace std;
 using namespace cv;
 
+class FaceDetection
+{
+	CascadeClassifier frontalFaceDetector;
+
+public:
+	FaceDetection();
+	void initializeClassifier();	
+	vector<Rect> storeFrontalFacePos(Mat);
+	void drawFaceOnImage(Mat, vector<Rect>);
+};
+
 #endif

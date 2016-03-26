@@ -9,6 +9,7 @@ int main()
 		cin.get();
 	}
 
+	FaceDetection faceDetection;
 	Mat frame;
 
 	while (1)
@@ -19,6 +20,9 @@ int main()
 			break;
 		}
 
+		vector<Rect> frontalFaces = faceDetection.storeFrontalFacePos(frame);
+		faceDetection.drawFaceOnImage(frame, frontalFaces);
+		
 		imshow("Output", frame);
 
 		if (waitKey(10) == 27)
