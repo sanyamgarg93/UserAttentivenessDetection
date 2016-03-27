@@ -35,21 +35,30 @@ public:
 class EyeDetection
 {
 	CascadeClassifier leftEyeDetector;
-	CascadeClassifier rightEyeDetector;
-	float EYE_SX, EYE_SY, EYE_SH, EYE_SW;
+	CascadeClassifier rightEyeDetector;	
 
 public:
 	EyeDetection();
-	vector<Rect> storeLeftEyePos(Mat);
-	vector<Rect> storeRightEyePos(Mat);
-	void drawLeftEyeOnImage(Mat, Rect, vector<Rect>);
-	void drawRightEyeOnImage(Mat, Rect, vector<Rect>);
+	Rect storeLeftEyePos(Mat);
+	Rect storeRightEyePos(Mat);
+	void drawLeftEyeOnImage(Mat, Rect, Rect);
+	void drawRightEyeOnImage(Mat, Rect, Rect);
+	Mat returnEyeImage(Mat, Rect);
+};
+
+class EyeCenterTracker
+{
+public:
+	Point estimateEyeCenter(Mat);
+	void drawLeftEyeCenter(Mat, Rect, Rect, Point);
+	void drawRightEyeCenter(Mat, Rect, Rect, Point);
 };
 
 class ImageProcessingMethods
 {
 public:
 	Mat sizeReduce(Mat, int);
+	Mat RGB2GRAY(Mat);
 };
 
 //Methods
@@ -59,5 +68,6 @@ void detectInImage(Mat);
 extern FaceDetection faceDetection;
 extern EyeDetection eyeDetection;
 extern ImageProcessingMethods imageProcessingMethods;
+extern EyeCenterTracker eyeCenterTracker;
 
 #endif

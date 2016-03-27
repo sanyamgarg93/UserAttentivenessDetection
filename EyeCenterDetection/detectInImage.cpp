@@ -30,12 +30,22 @@ void detectInImage(Mat frame)
 		Mat face = frame(faceRect);
 
 		//2. Run eye detector on the face
-		vector<Rect> leftEyePos = eyeDetection.storeLeftEyePos(face);
-		vector<Rect> rightEyePos = eyeDetection.storeRightEyePos(face);
+		Rect leftEyePos = eyeDetection.storeLeftEyePos(face);
+		Rect rightEyePos = eyeDetection.storeRightEyePos(face);
 
 		//3. Draw detected eyes
 		eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos);
 		eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos);		
+
+		//4. Run eye center tracker on each eye region
+		Mat leftEyeImage = eyeDetection.returnEyeImage(face, leftEyePos);
+		Point leftEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(leftEyeImage);
+
+		Mat rightEyeImage = eyeDetection.returnEyeImage(face, rightEyePos);
+		Point rightEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(rightEyeImage);
+
+		eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos, leftEyeCenterPosition);
+		eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos, rightEyeCenterPosition);
 	}
 
 	//Draw faces

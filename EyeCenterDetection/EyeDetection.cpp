@@ -1,4 +1,5 @@
 #include "EyeCenterDetectionHeaders.h"
+#include "constants.h"
 
 EyeDetection::EyeDetection()
 {
@@ -8,59 +9,93 @@ EyeDetection::EyeDetection()
 	string rightEyeCascadeFilename = "C:\\opencv\\sources\\data\\haarcascades_cuda\\haarcascade_righteye_2splits.xml";
 	rightEyeDetector.load(rightEyeCascadeFilename);
 
-	EYE_SX = 0.10, EYE_SY = 0.15, EYE_SH = 0.40, EYE_SW = 0.40;	
+	
 }
 
-vector<Rect> EyeDetection::storeRightEyePos(Mat faceImage)
+Rect EyeDetection::storeRightEyePos(Mat faceImage)
 {
 	//Run the eye detector on Right side of face	
 	Mat topRightOfFace = faceImage(Rect((1-EYE_SX-EYE_SW)*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
 
 	vector<Rect> rightEyePos;
-	leftEyeDetector.detectMultiScale(topRightOfFace, rightEyePos, 1.1, 2, CASCADE_FIND_BIGGEST_OBJECT, Size(0, 0));	//Run Left eye detector on right side of face
+	leftEyeDetector.detectMultiScale(
+									topRightOfFace, 
+									rightEyePos, 
+									1.1, 
+									2, 
+									CASCADE_FIND_BIGGEST_OBJECT, 
+									Size(0, 0)
+									);	//Run Left eye detector on right side of face
 
-	return rightEyePos;
+	int max = 0; Rect biggestRightEye;
+	for (int i = 0; i < rightEyePos.size(); i++)
+	{
+		if (rightEyePos[i].width > max)
+		{
+			max = rightEyePos[i].width;
+			biggestRightEye = rightEyePos[i];
+		}
+			
+	}
+
+	return biggestRightEye;
 }
 
-vector<Rect> EyeDetection::storeLeftEyePos(Mat faceImage)
+Rect EyeDetection::storeLeftEyePos(Mat faceImage)
 {
 	//Run the eye detector on Left side of face
 	Mat topLeftOfFace = faceImage(Rect(EYE_SX*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
 	
 	vector<Rect> leftEyePos;
-	rightEyeDetector.detectMultiScale(topLeftOfFace, leftEyePos, 1.1, 2, CASCADE_FIND_BIGGEST_OBJECT, Size(0, 0)); //Run Right eye detector on left side of face
+	rightEyeDetector.detectMultiScale(
+									topLeftOfFace, 
+									leftEyePos, 
+									1.1, 
+									2, 
+									CASCADE_FIND_BIGGEST_OBJECT, 
+									Size(0, 0)
+									); //Run Right eye detector on left side of face
 
-	return leftEyePos;
+	int max = 0; Rect biggestLeftEye;
+	for (int i = 0; i < leftEyePos.size(); i++)
+	{
+		if (leftEyePos[i].width > max)
+		{
+			max = leftEyePos[i].width;
+			biggestLeftEye = leftEyePos[i];
+		}
+	}
+
+	return biggestLeftEye;
 }
 
-void EyeDetection::drawRightEyeOnImage(Mat image, Rect facePos, vector<Rect> eyePositions)
+void EyeDetection::drawRightEyeOnImage(Mat image, Rect facePos, Rect eyePosition)
 {
-	for (int j = 0; j < eyePositions.size(); j++)
-	{
-		Rect eyeRect(
-					facePos.x + (1-EYE_SX-EYE_SW)*facePos.width + eyePositions[j].x,
-					facePos.y + EYE_SY*facePos.height + eyePositions[j].y, 
-					eyePositions[j].width, 
-					eyePositions[j].height
-					);
+	Rect eyeRect(
+				facePos.x + (1-EYE_SX-EYE_SW)*facePos.width + eyePosition.x,
+				facePos.y + EYE_SY*facePos.height + eyePosition.y, 
+				eyePosition.width, 
+				eyePosition.height
+				);
 
-		rectangle(image, eyeRect, Scalar(0, 255, 0), 1);
-	}
+	rectangle(image, eyeRect, Scalar(0, 255, 0), 1);	
 }
 
-void EyeDetection::drawLeftEyeOnImage(Mat image, Rect facePos, vector<Rect> eyePositions)
-{
-	for (int j = 0; j < eyePositions.size(); j++)
-	{
-		Rect eyeRect(
-			facePos.x + EYE_SX*facePos.width + eyePositions[j].x,
-			facePos.y + EYE_SY*facePos.height + eyePositions[j].y,
-			eyePositions[j].width,
-			eyePositions[j].height
-			);
+void EyeDetection::drawLeftEyeOnImage(Mat image, Rect facePos, Rect eyePosition)
+{	
+	Rect eyeRect(
+				facePos.x + EYE_SX*facePos.width + eyePosition.x,
+				facePos.y + EYE_SY*facePos.height + eyePosition.y,
+				eyePosition.width,
+				eyePosition.height
+				);
 
-		rectangle(image, eyeRect, Scalar(0, 255, 0), 1);
-	}
+	rectangle(image, eyeRect, Scalar(0, 255, 0), 1);	
+}
+
+Mat EyeDetection::returnEyeImage(Mat faceImage, Rect eyePosition)
+{
+	return faceImage(eyePosition);	;
 }
 
 

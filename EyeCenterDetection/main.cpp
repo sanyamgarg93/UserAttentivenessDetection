@@ -4,6 +4,7 @@
 FaceDetection faceDetection;
 EyeDetection eyeDetection;
 ImageProcessingMethods imageProcessingMethods;
+EyeCenterTracker eyeCenterTracker;
 
 int main()
 {
