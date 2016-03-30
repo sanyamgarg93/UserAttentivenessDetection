@@ -91,6 +91,16 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="EyeCenterDetectionHeaders.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="DetectionCascades\haarcascade_eye.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="DetectionCascades\haarcascade_eye_tree_eyeglasses.xml" />
+    <Xml Include="DetectionCascades\haarcascade_lefteye_2splits.xml" />
+    <Xml Include="DetectionCascades\haarcascade_profileface.xml" />
+    <Xml Include="DetectionCascades\haarcascade_righteye_2splits.xml" />
+    <Xml Include="DetectionCascades\lbpcascade_frontalface.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

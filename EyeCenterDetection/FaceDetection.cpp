@@ -4,23 +4,25 @@
 
 FaceDetection::FaceDetection()
 {
-	string frontalFaceCascadeFilename = "C:\\opencv\\sources\\data\\lbpcascades\\lbpcascade_frontalface.xml";
+	string frontalFaceCascadeFilename = "DetectionCascades\\lbpcascade_frontalface.xml";
 	frontalFaceDetector.load(frontalFaceCascadeFilename);
 }
 
 //NOT USED since classifier is initialized in the classifier
 void FaceDetection::initializeClassifier()
 {
-	string frontalFaceCascadeFilename = "C:\\opencv\\sources\\data\\lbpcascades\\lbpcascade_frontalface.xml";
+	string frontalFaceCascadeFilename = "DetectionCascades\\lbpcascade_frontalface.xml";
 	frontalFaceDetector.load(frontalFaceCascadeFilename);
 }
 
 vector<Rect> FaceDetection::storeFrontalFacePos(Mat image)
 {
+	//Mat imageGray = imageProcessingMethods.RGB2GRAY(image);
+
 	int flags = CV_HAAR_DO_CANNY_PRUNING;					// Search for many faces.
 	Size minFeatureSize(image.cols / 5, image.cols / 5);	// Smallest face size.
-	float searchScaleFactor = 1.2f;							// How many sizes to search.
-	int minNeighbors = 2;									// Reliability vs many faces.
+	float searchScaleFactor = 1.1f;							// How many sizes to search.
+	int minNeighbors = 3;									// Reliability vs many faces.
 
 	vector<Rect> faces;
 	frontalFaceDetector.detectMultiScale(	

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="OpenCV Detection Cascades">
+      <UniqueIdentifier>{cfb04a5f-3f11-4155-83e7-fab084eb23f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -41,5 +44,25 @@
     <ClInclude Include="constants.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="DetectionCascades\haarcascade_eye.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
+    <Xml Include="DetectionCascades\haarcascade_eye_tree_eyeglasses.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
+    <Xml Include="DetectionCascades\haarcascade_lefteye_2splits.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
+    <Xml Include="DetectionCascades\haarcascade_profileface.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
+    <Xml Include="DetectionCascades\haarcascade_righteye_2splits.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
+    <Xml Include="DetectionCascades\lbpcascade_frontalface.xml">
+      <Filter>OpenCV Detection Cascades</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

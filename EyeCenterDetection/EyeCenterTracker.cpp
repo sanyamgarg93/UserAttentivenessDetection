@@ -6,10 +6,13 @@
 * "Automatic Adaptive Center of Pupil Detection Using Face Detection and CDF Analysis"
 * that uses adaptive thresholding based on normalized cumulative histogram
 */
-Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB)
+Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 {
 	//Convert to grayscale
 	Mat eyeImage = imageProcessingMethods.RGB2GRAY(eyeImageRGB);
+
+	//namedWindow("Grayscale " + eyeCaption, CV_WINDOW_AUTOSIZE);
+	//imshow("Grayscale " + eyeCaption, eyeImage);
 
 	//Step-1: Create histogram of the eye region
 	
@@ -58,7 +61,9 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB)
 	}
 
 	//Step-5: Choose the darkest pixel among thresholded pixels
-	//imshow("Eroded eye image", eyeImageTrial);
+	
+	//namedWindow("Eroded eye image " + eyeCaption, CV_WINDOW_AUTOSIZE);
+	//imshow("Eroded eye image " + eyeCaption, eyeImageTrial);
 	erode(eyeImageTrial, eyeImageTrial, Mat());
 	
 	int min = 255, xPos = 0, yPos = 0;
@@ -101,10 +106,10 @@ void EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, P
 void EyeCenterTracker::drawRightEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {
 	circle(
-		frame,
-		Point(facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x, facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y),
-		3,
-		Scalar(255, 255, 255),
-		1
-		);
+			frame,
+			Point(facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x, facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y),
+			3,
+			Scalar(255, 255, 255),
+			1
+		  );
 }

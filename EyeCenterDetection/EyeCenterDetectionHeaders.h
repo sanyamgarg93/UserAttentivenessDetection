@@ -43,13 +43,14 @@ public:
 	Rect storeRightEyePos(Mat);
 	void drawLeftEyeOnImage(Mat, Rect, Rect);
 	void drawRightEyeOnImage(Mat, Rect, Rect);
-	Mat returnEyeImage(Mat, Rect);
+	Mat returnLeftEyeImage(Mat, Rect);
+	Mat returnRightEyeImage(Mat, Rect);
 };
 
 class EyeCenterTracker
 {
 public:
-	Point estimateEyeCenter(Mat);
+	Point estimateEyeCenter(Mat, string);
 	void drawLeftEyeCenter(Mat, Rect, Rect, Point);
 	void drawRightEyeCenter(Mat, Rect, Rect, Point);
 };
