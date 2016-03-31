@@ -6,17 +6,22 @@
 * "Automatic Adaptive Center of Pupil Detection Using Face Detection and CDF Analysis"
 * that uses adaptive thresholding based on normalized cumulative histogram
 */
+EyeCenterTracker::EyeCenterTracker()
+{
+	histR[256] = { 0 };
+	float cumHistR[256] = { 0 };
+	Point centerWrtEyeImage; Point centerWrtFrame;
+}
+
 Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 {
 	//Convert to grayscale
 	Mat eyeImage = imageProcessingMethods.RGB2GRAY(eyeImageRGB);
-
-	//namedWindow("Grayscale " + eyeCaption, CV_WINDOW_AUTOSIZE);
-	//imshow("Grayscale " + eyeCaption, eyeImage);
-
+	
 	//Step-1: Create histogram of the eye region
 	
-	int histR[256] = { 0 };
+	memset(histR, 0, sizeof(histR));
+	//int histR[256] = { 0 };
 	for (int i = 0; i < eyeImage.rows; i++)
 	{
 		for (int j = 0; j < eyeImage.cols; j++)
@@ -27,7 +32,8 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 
 	//Step-2: Create cumulative histograms
 
-	float cumHistR[256] = { 0 };
+	memset(cumHistR, 0, sizeof(cumHistR));
+	//float cumHistR[256] = { 0 };
 	for (int i = 0; i < 256; i++)
 	{
 		int sum = 0;
@@ -62,14 +68,11 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 
 	//Step-5: Choose the darkest pixel among thresholded pixels
 	
-	//namedWindow("Eroded eye image " + eyeCaption, CV_WINDOW_AUTOSIZE);
-	//imshow("Eroded eye image " + eyeCaption, eyeImageTrial);
 	erode(eyeImageTrial, eyeImageTrial, Mat());
 	
 	int min = 255, xPos = 0, yPos = 0;
 	for (int i = 0; i < eyeImageTrial.rows; i++)
-	{
-		//for (int j = 0; j < eyeImageTrial.cols; j++)
+	{	
 		for (int j = eyeImageTrial.cols * 5 / 100; j < 95 * eyeImageTrial.cols / 100; j++)
 		{
 			if (eyeImageTrial.at<uchar>(i, j) == 255 && eyeImage.at<uchar>(i, j) < min)
@@ -88,28 +91,25 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 		yPos = eyeImage.rows / 2;
 	}
 
-	Point center; center.x = xPos; center.y = yPos;
-	return center;
+	//Point center; 
+	centerWrtEyeImage.x = xPos; centerWrtEyeImage.y = yPos;
+	return centerWrtEyeImage;
 }
 
 void EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
-{
-	circle(
-			frame, 
-			Point(facePos.x + EYE_SX*facePos.width + eyePos.x + eyeCenterPos.x, facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y),
-			3, 
-			Scalar(255, 255, 255), 
-			1
-		  );
+{		
+	centerWrtFrame.x = facePos.x + EYE_SX*facePos.width + eyePos.x + eyeCenterPos.x;
+	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
+
+	line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
+	line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);
 }
 
 void EyeCenterTracker::drawRightEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {
-	circle(
-			frame,
-			Point(facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x, facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y),
-			3,
-			Scalar(255, 255, 255),
-			1
-		  );
+	centerWrtFrame.x = facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x;
+	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
+
+	line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
+	line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);		
 }

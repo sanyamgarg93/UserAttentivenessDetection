@@ -24,10 +24,13 @@ using namespace cv;
 class FaceDetection
 {
 	CascadeClassifier frontalFaceDetector;
+	float searchScaleFactor;
+	int minNeighbourCount;
+	int searchFlags;
+	Size minSearchSize;
 
 public:
 	FaceDetection();
-	void initializeClassifier();	
 	vector<Rect> storeFrontalFacePos(Mat);
 	void drawFaceOnImage(Mat, vector<Rect>);
 };
@@ -36,11 +39,15 @@ class EyeDetection
 {
 	CascadeClassifier leftEyeDetector;
 	CascadeClassifier rightEyeDetector;	
+	float searchScaleFactor;
+	int minNeighbourCount;
+	int searchFlags;
+	Size minSearchSize;
 
 public:
 	EyeDetection();
-	Rect storeLeftEyePos(Mat);
-	Rect storeRightEyePos(Mat);
+	vector<Rect> storeLeftEyePos(Mat);
+	vector<Rect> storeRightEyePos(Mat);
 	void drawLeftEyeOnImage(Mat, Rect, Rect);
 	void drawRightEyeOnImage(Mat, Rect, Rect);
 	Mat returnLeftEyeImage(Mat, Rect);
@@ -49,7 +56,12 @@ public:
 
 class EyeCenterTracker
 {
+	int histR[256]; float cumHistR[256];
+	Point centerWrtEyeImage;	
+	Point centerWrtFrame;
+
 public:
+	EyeCenterTracker();
 	Point estimateEyeCenter(Mat, string);
 	void drawLeftEyeCenter(Mat, Rect, Rect, Point);
 	void drawRightEyeCenter(Mat, Rect, Rect, Point);

@@ -6,7 +6,7 @@ void detectInImage(Mat frame)
 	//Reduce Image Size
 	Mat smallerFrame = imageProcessingMethods.sizeReduce(frame, SMALLER_DETECTION_WIDTH);
 	float scale = float(frame.cols) / SMALLER_DETECTION_WIDTH; 
-
+	
 	//Detect faces in smaller image
 	vector<Rect> frontalFaces = faceDetection.storeFrontalFacePos(smallerFrame);
 	
@@ -28,28 +28,31 @@ void detectInImage(Mat frame)
 		//1. Extract the face
 		Rect faceRect(frontalFaces[i].x, frontalFaces[i].y, frontalFaces[i].width, frontalFaces[i].height);
 		Mat face = frame(faceRect);
-
+		
 		//2. Run eye detector on the face
-		Rect leftEyePos = eyeDetection.storeLeftEyePos(face);
-		Rect rightEyePos = eyeDetection.storeRightEyePos(face);
+		vector<Rect> leftEyePos = eyeDetection.storeLeftEyePos(face);
+		vector<Rect> rightEyePos = eyeDetection.storeRightEyePos(face);
 
-		//3. Draw detected eyes
-		eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos);
-		eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos);		
-
-		//4. Run eye center tracker on each eye region (if found)
-		if (leftEyePos.height != 0 && leftEyePos.width != 0)
+		//Left Eye Processing
+		for (int j = 0; j < leftEyePos.size(); j++)
 		{
-			Mat leftEyeImage = eyeDetection.returnLeftEyeImage(face, leftEyePos);
+			//3. Draw detected eyes
+			eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos[j]);			
+
+			//4. Run eye center tracker on each eye region (if found)			
+			Mat leftEyeImage = eyeDetection.returnLeftEyeImage(face, leftEyePos[j]);
 			Point leftEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(leftEyeImage, "Left");
-			eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos, leftEyeCenterPosition);
+			eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], leftEyeCenterPosition);						
 		}
 
-		if (rightEyePos.height != 0 && rightEyePos.width != 0)
+		//Right Eye Processing
+		for (int j = 0; j < rightEyePos.size(); j++)
 		{
-			Mat rightEyeImage = eyeDetection.returnRightEyeImage(face, rightEyePos);
+			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
+
+			Mat rightEyeImage = eyeDetection.returnRightEyeImage(face, rightEyePos[j]);
 			Point rightEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(rightEyeImage, "Right");
-			eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos, rightEyeCenterPosition);
+			eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], rightEyeCenterPosition);			
 		}
 	}
 

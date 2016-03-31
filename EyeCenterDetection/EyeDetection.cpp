@@ -8,86 +8,51 @@ EyeDetection::EyeDetection()
 
 	string rightEyeCascadeFilename = "DetectionCascades\\haarcascade_righteye_2splits.xml";
 	rightEyeDetector.load(rightEyeCascadeFilename);	
+
+	searchScaleFactor = 1.1; 
+	minNeighbourCount = 2; 
+	searchFlags = CASCADE_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH; //This combination of flags terminates the search at whatever scale the first candidate is found.
+	minSearchSize = Size(10, 10);
 }
 
-Rect EyeDetection::storeRightEyePos(Mat faceImage)
+vector<Rect> EyeDetection::storeRightEyePos(Mat faceImage)
 {
 	//Run the eye detector on Right side of face	
 	Mat topRightOfFace = faceImage(Rect((1-EYE_SX-EYE_SW)*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
-
-	//namedWindow("Right Face Search region", CV_WINDOW_AUTOSIZE);
-	//imshow("Right Face Search region", topRightOfFace);
-
+		
 	Mat topRightOfFaceGray = imageProcessingMethods.RGB2GRAY(topRightOfFace);
-	equalizeHist(topRightOfFaceGray, topRightOfFaceGray);
-
+	
 	vector<Rect> rightEyePos;
 	leftEyeDetector.detectMultiScale(
 									topRightOfFaceGray, 
 									rightEyePos, 
-									1.1, 
-									3, 
-									CASCADE_FIND_BIGGEST_OBJECT, 
-									Size(10, 10)
+									searchScaleFactor, 
+									minNeighbourCount, 
+									searchFlags, 
+									minSearchSize
 									);	//Run Left eye detector on right side of face
 
-	if (rightEyePos.size() == 0) //No right eye found
-	{
-		//cout << "Right eye NOT FOUND" << endl;
-		return Rect(0, 0, 0, 0);
-	}
-
-	int max = 0; Rect biggestRightEye;
-	for (int i = 0; i < rightEyePos.size(); i++)
-	{
-		if (rightEyePos[i].width > max)
-		{
-			max = rightEyePos[i].width;
-			biggestRightEye = rightEyePos[i];
-		}			
-	}
-
-	return biggestRightEye;
+	return rightEyePos;
 }
 
-Rect EyeDetection::storeLeftEyePos(Mat faceImage)
+vector<Rect> EyeDetection::storeLeftEyePos(Mat faceImage)
 {
 	//Run the eye detector on Left side of face
 	Mat topLeftOfFace = faceImage(Rect(EYE_SX*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
-	
-	//namedWindow("Left Face Search region", CV_WINDOW_AUTOSIZE);
-	//imshow("Left Face Search region", topLeftOfFace);
 
 	Mat topLeftOfFaceGray = imageProcessingMethods.RGB2GRAY(topLeftOfFace);
-	equalizeHist(topLeftOfFaceGray, topLeftOfFaceGray);
 
 	vector<Rect> leftEyePos;
 	rightEyeDetector.detectMultiScale(
 									topLeftOfFaceGray, 
 									leftEyePos, 
-									1.1, 
-									3, 
-									CASCADE_FIND_BIGGEST_OBJECT, 
-									Size(10, 10)
+									searchScaleFactor,
+									minNeighbourCount,
+									searchFlags,
+									minSearchSize
 									); //Run Right eye detector on left side of face
 
-	if (leftEyePos.size() == 0) //No left eye found
-	{
-		//cout << "Left Eye NOT FOUND" << endl;
-		return Rect(0, 0, 0, 0);
-	}
-
-	int max = 0; Rect biggestLeftEye;
-	for (int i = 0; i < leftEyePos.size(); i++)
-	{
-		if (leftEyePos[i].width > max)
-		{
-			max = leftEyePos[i].width;
-			biggestLeftEye = leftEyePos[i];
-		}
-	}
-
-	return biggestLeftEye;
+	return leftEyePos;
 }
 
 void EyeDetection::drawRightEyeOnImage(Mat image, Rect facePos, Rect eyePosition)
