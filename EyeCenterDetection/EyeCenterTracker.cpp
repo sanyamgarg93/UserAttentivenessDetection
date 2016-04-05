@@ -96,20 +96,44 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 	return centerWrtEyeImage;
 }
 
-void EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
+Point EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {		
 	centerWrtFrame.x = facePos.x + EYE_SX*facePos.width + eyePos.x + eyeCenterPos.x;
 	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
 
-	line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
-	line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);
+	//line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
+	//line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);
+
+	return centerWrtFrame;
 }
 
-void EyeCenterTracker::drawRightEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
+Point EyeCenterTracker::drawRightEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {
 	centerWrtFrame.x = facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x;
 	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
 
-	line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
-	line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);		
+	//line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
+	//line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);		
+
+	return centerWrtFrame;
+}
+
+Point EyeCenterTracker::drawLeftEyeCenter(Mat frame, Point eyeCenterPos, int radius)
+{
+	//circle(frame, eyeCenterPos, radius, Scalar(0, 255, 0), 1, 8);
+
+	line(frame, Point(eyeCenterPos.x - radius, eyeCenterPos.y), Point(eyeCenterPos.x + radius, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius), Point(eyeCenterPos.x, eyeCenterPos.y + radius), Scalar(0, 255, 0), 1, 8);
+
+	return eyeCenterPos;
+}
+
+Point EyeCenterTracker::drawRightEyeCenter(Mat frame, Point eyeCenterPos, int radius)
+{
+	//circle(frame, eyeCenterPos, radius, Scalar(0, 255, 0), 1, 8);
+
+	line(frame, Point(eyeCenterPos.x - radius, eyeCenterPos.y), Point(eyeCenterPos.x + radius, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius), Point(eyeCenterPos.x, eyeCenterPos.y + radius), Scalar(0, 255, 0), 1, 8);
+
+	return eyeCenterPos;
 }

@@ -5,6 +5,7 @@ FaceDetection faceDetection;
 EyeDetection eyeDetection;
 ImageProcessingMethods imageProcessingMethods;
 EyeCenterTracker eyeCenterTracker;
+Snakuscule snakuscule;
 
 int main()
 {
@@ -20,7 +21,7 @@ int main()
 	Mat frame;
 
 	while (true)
-	{
+	{		
 		if (!capture.read(frame)) 
 		{
 			cout << "Frames not found [Frame Capture Error]" << endl;
@@ -29,11 +30,11 @@ int main()
 
 		start = clock();
 		detectInImage(frame);		
-		std::cout << "Time: " << (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << std::endl;
+		cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 
 		imshow("Output", frame);
 
 		if (waitKey(10) == 27)
-			break;
+			break;		
 	}	
 }

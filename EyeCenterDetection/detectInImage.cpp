@@ -41,8 +41,16 @@ void detectInImage(Mat frame)
 
 			//4. Run eye center tracker on each eye region (if found)			
 			Mat leftEyeImage = eyeDetection.returnLeftEyeImage(face, leftEyePos[j]);
-			Point leftEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(leftEyeImage, "Left");
-			eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], leftEyeCenterPosition);						
+			Point eyeCenterLeft = eyeCenterTracker.estimateEyeCenter(leftEyeImage, "Left");
+			Point leftEyeCenterPosition = eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], eyeCenterLeft);
+
+			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*0.07;			
+			int  center_initial_left_frame[2] = { leftEyeCenterPosition.x, leftEyeCenterPosition.y };
+
+			snakuscule.runSnakuscule(frame, center_initial_left_frame, &radius_left);
+			Point center_new_left; center_new_left.x = center_initial_left_frame[0]; center_new_left.y = center_initial_left_frame[1];
+			
+			eyeCenterTracker.drawRightEyeCenter(frame, center_new_left, radius_left);
 		}
 
 		//Right Eye Processing
@@ -51,8 +59,16 @@ void detectInImage(Mat frame)
 			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
 
 			Mat rightEyeImage = eyeDetection.returnRightEyeImage(face, rightEyePos[j]);
-			Point rightEyeCenterPosition = eyeCenterTracker.estimateEyeCenter(rightEyeImage, "Right");
-			eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], rightEyeCenterPosition);			
+			Point eyeCenterRight = eyeCenterTracker.estimateEyeCenter(rightEyeImage, "Right");
+			Point rightEyeCenterPosition = eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], eyeCenterRight);		
+
+			int radius_right = (rightEyeImage.cols + rightEyeImage.rows)*0.07;
+			int center_initial_right_frame[2] = { rightEyeCenterPosition.x, rightEyeCenterPosition.y};
+			
+			snakuscule.runSnakuscule(frame, center_initial_right_frame, &radius_right);
+			Point center_new_right; center_new_right.x = center_initial_right_frame[0]; center_new_right.y = center_initial_right_frame[1];
+
+			eyeCenterTracker.drawRightEyeCenter(frame, center_new_right, radius_right);
 		}
 	}
 

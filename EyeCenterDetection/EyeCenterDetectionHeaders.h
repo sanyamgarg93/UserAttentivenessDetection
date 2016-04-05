@@ -63,8 +63,10 @@ class EyeCenterTracker
 public:
 	EyeCenterTracker();
 	Point estimateEyeCenter(Mat, string);
-	void drawLeftEyeCenter(Mat, Rect, Rect, Point);
-	void drawRightEyeCenter(Mat, Rect, Rect, Point);
+	Point drawLeftEyeCenter(Mat, Rect, Rect, Point);
+	Point drawRightEyeCenter(Mat, Rect, Rect, Point);
+	Point drawLeftEyeCenter(Mat, Point, int);
+	Point drawRightEyeCenter(Mat, Point, int);
 };
 
 class ImageProcessingMethods
@@ -72,6 +74,19 @@ class ImageProcessingMethods
 public:
 	Mat sizeReduce(Mat, int);
 	Mat RGB2GRAY(Mat);
+};
+
+class Snakuscule
+{
+	float alpha;
+	int positions[50]; 
+
+public:
+	Snakuscule();
+	void runSnakuscule(Mat, int *, int *);
+	float snakeEnergy(Mat, int, float, int, int);
+	float outerAnnulusEnergy(Mat, int, float alpha, int *);
+	float innerCircleEnergy(Mat, int, int, int);
 };
 
 //Methods
@@ -82,5 +97,6 @@ extern FaceDetection faceDetection;
 extern EyeDetection eyeDetection;
 extern ImageProcessingMethods imageProcessingMethods;
 extern EyeCenterTracker eyeCenterTracker;
+extern Snakuscule snakuscule;
 
 #endif

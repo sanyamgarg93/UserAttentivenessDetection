@@ -71,6 +71,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -86,6 +87,7 @@
     <ClCompile Include="FaceDetection.cpp" />
     <ClCompile Include="ImageProcessingMethods.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Snakuscule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
