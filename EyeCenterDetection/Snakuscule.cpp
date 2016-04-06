@@ -5,8 +5,7 @@ Snakuscule::Snakuscule()
 	alpha = sqrt(float(2.0));
 	positions[50] = { 0 };		
 
-	//Implement float hash table of 1000 rows 1000 cols and upto 100 radius
-	memset(hashTable, 0, sizeof(hashTable));
+	memset(hashTable, 0, sizeof(hashTable));	
 }
 
 float Snakuscule::hashEnergy(Mat grayFrame, int center_x, int center_y, int radius)
@@ -15,6 +14,8 @@ float Snakuscule::hashEnergy(Mat grayFrame, int center_x, int center_y, int radi
 	{
 		hashTable[center_x][center_y][radius] = snakeEnergy(grayFrame, radius, alpha, center_x, center_y);
 	}
+	hashChanges.push_back({{ center_x, center_y, radius }});
+
 	return hashTable[center_x][center_y][radius];
 }
 
@@ -28,17 +29,20 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 	int count = 0;
 	memset(positions, 0, sizeof(positions));
 
-	memset(hashTable, 0, sizeof(hashTable));
+	for (int x = 0; x < hashChanges.size(); x++)
+	{
+		hashTable[hashChanges[x][0]][hashChanges[x][1]][hashChanges[x][2]] = 0;
+	}
+	hashChanges.clear();
 		
 	while (true)
-	{
-		
-		float diff_xpos = hashEnergy(grayFrame, center[0] + 1, center[1], *radius) - hashEnergy(grayFrame, center[0], center[1], *radius);
-		float diff_xneg = hashEnergy(grayFrame, center[0] - 1, center[1], *radius) - hashEnergy(grayFrame, center[0], center[1], *radius);
-		float diff_ypos = hashEnergy(grayFrame, center[0], center[1] + 1, *radius) - hashEnergy(grayFrame, center[0], center[1], *radius);
-		float diff_yneg = hashEnergy(grayFrame, center[0], center[1] - 1, *radius) - hashEnergy(grayFrame, center[0], center[1], *radius);
-		float diff_radpos = hashEnergy(grayFrame, center[0], center[1], *radius + 1) - hashEnergy(grayFrame, center[0], center[1], *radius);
-		float diff_radneg = hashEnergy(grayFrame, center[0], center[1], *radius - 1) - hashEnergy(grayFrame, center[0], center[1], *radius);
+	{		
+		float diff_xpos = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0] + 1, center[1], *radius);
+		float diff_xneg = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0] - 1, center[1], *radius);
+		float diff_ypos = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0], center[1] + 1, *radius);
+		float diff_yneg = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0], center[1] - 1, *radius);
+		float diff_radpos = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0], center[1], *radius + 1);
+		float diff_radneg = hashEnergy(grayFrame, center[0], center[1], *radius) - hashEnergy(grayFrame, center[0], center[1], *radius - 1);
 		
 		/*
 		float diff_xpos = snakeEnergy(grayFrame, *radius, alpha, center[0] + 1, center[1]) - snakeEnergy(grayFrame, *radius, alpha, center[0], center[1]);
@@ -50,12 +54,7 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 		*/
 
 		float energy_array[6] = { diff_xpos, diff_xneg, diff_ypos, diff_yneg, diff_radpos, diff_radneg };
-
-		for (int i = 0; i<6; i++)
-		{
-			energy_array[i] = -energy_array[i];
-		}
-
+		
 		float min = energy_array[0];
 		int pos = 0;
 		for (int i = 0; i<6; i++)
@@ -95,14 +94,11 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 		positions[count] = pos;
 
 		if (positions[count] * positions[count - 1] == 6 || positions[count] * positions[count - 1] == 20)
-		{		
 			break;
-		}
 		
 		if ((positions[count] == 1 && positions[count - 1] == 0) || (positions[count] == 0 && positions[count - 1] == 1))
-		{
 			break;
-		}
+		
 		count++;
 	}
 }

@@ -15,6 +15,7 @@
 #include<opencv2\highgui.hpp>
 #include<opencv2\objdetect.hpp>
 #include<opencv2\imgproc.hpp>
+#include<array>
 
 //Namespaces
 using namespace std;
@@ -80,7 +81,8 @@ class Snakuscule
 {
 	float alpha;
 	int positions[50]; 
-	float hashTable[640][480][35]; //Since frame width does not exist 640. However, height can be more that 480. Check later. 
+	float hashTable[640][640][50]; //Since frame width does not exist 640.
+	std::vector<std::array<int, 3> > hashChanges;
 
 public:
 	Snakuscule();
