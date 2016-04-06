@@ -44,7 +44,7 @@ void detectInImage(Mat frame)
 			Point eyeCenterLeft = eyeCenterTracker.estimateEyeCenter(leftEyeImage, "Left");
 			Point leftEyeCenterPosition = eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], eyeCenterLeft);
 
-			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*0.07;			
+			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*R_RATIO;			
 			int  center_initial_left_frame[2] = { leftEyeCenterPosition.x, leftEyeCenterPosition.y };
 
 			snakuscule.runSnakuscule(frame, center_initial_left_frame, &radius_left);
@@ -62,7 +62,7 @@ void detectInImage(Mat frame)
 			Point eyeCenterRight = eyeCenterTracker.estimateEyeCenter(rightEyeImage, "Right");
 			Point rightEyeCenterPosition = eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], eyeCenterRight);		
 
-			int radius_right = (rightEyeImage.cols + rightEyeImage.rows)*0.07;
+			int radius_right = (rightEyeImage.cols + rightEyeImage.rows)*R_RATIO;
 			int center_initial_right_frame[2] = { rightEyeCenterPosition.x, rightEyeCenterPosition.y};
 			
 			snakuscule.runSnakuscule(frame, center_initial_right_frame, &radius_right);

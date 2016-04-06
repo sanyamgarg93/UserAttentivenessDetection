@@ -122,8 +122,8 @@ Point EyeCenterTracker::drawLeftEyeCenter(Mat frame, Point eyeCenterPos, int rad
 {
 	//circle(frame, eyeCenterPos, radius, Scalar(0, 255, 0), 1, 8);
 
-	line(frame, Point(eyeCenterPos.x - radius, eyeCenterPos.y), Point(eyeCenterPos.x + radius, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
-	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius), Point(eyeCenterPos.x, eyeCenterPos.y + radius), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x - radius/2, eyeCenterPos.y), Point(eyeCenterPos.x + radius/2, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius/2), Point(eyeCenterPos.x, eyeCenterPos.y + radius/2), Scalar(0, 255, 0), 1, 8);
 
 	return eyeCenterPos;
 }
@@ -132,8 +132,8 @@ Point EyeCenterTracker::drawRightEyeCenter(Mat frame, Point eyeCenterPos, int ra
 {
 	//circle(frame, eyeCenterPos, radius, Scalar(0, 255, 0), 1, 8);
 
-	line(frame, Point(eyeCenterPos.x - radius, eyeCenterPos.y), Point(eyeCenterPos.x + radius, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
-	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius), Point(eyeCenterPos.x, eyeCenterPos.y + radius), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x - radius/2, eyeCenterPos.y), Point(eyeCenterPos.x + radius/2, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius/2), Point(eyeCenterPos.x, eyeCenterPos.y + radius/2), Scalar(0, 255, 0), 1, 8);
 
 	return eyeCenterPos;
 }

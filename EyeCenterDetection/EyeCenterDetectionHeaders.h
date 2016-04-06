@@ -80,6 +80,7 @@ class Snakuscule
 {
 	float alpha;
 	int positions[50]; 
+	float hashTable[640][480][35]; //Since frame width does not exist 640. However, height can be more that 480. Check later. 
 
 public:
 	Snakuscule();
@@ -87,6 +88,7 @@ public:
 	float snakeEnergy(Mat, int, float, int, int);
 	float outerAnnulusEnergy(Mat, int, float alpha, int *);
 	float innerCircleEnergy(Mat, int, int, int);
+	float hashEnergy(Mat, int, int, int);
 };
 
 //Methods

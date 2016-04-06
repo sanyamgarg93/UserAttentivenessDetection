@@ -9,11 +9,11 @@ Snakuscule snakuscule;
 
 int main()
 {
-	VideoCapture capture(0);
-	//VideoCapture capture("talking_face.avi");
+	//VideoCapture capture(0);
+	VideoCapture capture("talking_face.avi");
 	if (!capture.isOpened())
 	{
-		cout << "Camera not found [Camera Initialization Error]" << endl;
+		cout << "Camera/File not found" << endl;
 		cin.get();
 	}
 	
@@ -22,18 +22,23 @@ int main()
 
 	while (true)
 	{		
-		if (!capture.read(frame)) 
-		{
-			cout << "Frames not found [Frame Capture Error]" << endl;
+		//Capture frames
+		if (!capture.read(frame)) {
+			cout << "Could not capture frames" << endl;
 			break;
 		}
 
+		//Limit frame size to maximum 640 pixels width.
+		if (frame.cols > 640);
+			frame = imageProcessingMethods.sizeReduce(frame, 640);
+			
+		//Call the procedure on each frame
 		start = clock();
 		detectInImage(frame);		
 		cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 
+		//Display output detections
 		imshow("Output", frame);
-
 		if (waitKey(10) == 27)
 			break;		
 	}	
