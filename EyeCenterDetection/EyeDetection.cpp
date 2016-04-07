@@ -59,9 +59,9 @@ void EyeDetection::drawRightEyeOnImage(Mat image, Rect facePos, Rect eyePosition
 {
 	Rect eyeRect(
 				facePos.x + (1-EYE_SX-EYE_SW)*facePos.width + eyePosition.x,
-				facePos.y + EYE_SY*facePos.height + eyePosition.y, 
+				facePos.y + EYE_SY*facePos.height * (2 - EW_RATIO) + eyePosition.y * (2 - EW_RATIO),
 				eyePosition.width, 
-				eyePosition.height
+				eyePosition.height * EW_RATIO
 				);
 
 	rectangle(image, eyeRect, Scalar(0, 255, 0), 1);	
@@ -70,10 +70,10 @@ void EyeDetection::drawRightEyeOnImage(Mat image, Rect facePos, Rect eyePosition
 void EyeDetection::drawLeftEyeOnImage(Mat image, Rect facePos, Rect eyePosition)
 {	
 	Rect eyeRect(
-				facePos.x + EYE_SX*facePos.width + eyePosition.x,
-				facePos.y + EYE_SY*facePos.height + eyePosition.y,
+				facePos.x + EYE_SX*facePos.width + eyePosition.x, 
+				facePos.y + EYE_SY*facePos.height * (2 - EW_RATIO) + eyePosition.y * (2 - EW_RATIO),
 				eyePosition.width,
-				eyePosition.height
+				eyePosition.height * EW_RATIO
 				);
 
 	rectangle(image, eyeRect, Scalar(0, 255, 0), 1);	
@@ -81,12 +81,22 @@ void EyeDetection::drawLeftEyeOnImage(Mat image, Rect facePos, Rect eyePosition)
 
 Mat EyeDetection::returnRightEyeImage(Mat faceImage, Rect eyePosition)
 {	
-	return faceImage(Rect((1-EYE_SX-EYE_SW)*faceImage.cols + eyePosition.x, EYE_SY*faceImage.rows + eyePosition.y, eyePosition.width, eyePosition.height));
+	return faceImage(Rect(
+						(1-EYE_SX-EYE_SW)*faceImage.cols + eyePosition.x, 
+						EYE_SY*faceImage.rows * (2 - EW_RATIO) + eyePosition.y * (2 - EW_RATIO),
+						eyePosition.width, 
+						eyePosition.height * EW_RATIO
+						));
 }
 
 Mat EyeDetection::returnLeftEyeImage(Mat faceImage, Rect eyePosition)
 {
-	return faceImage(Rect(EYE_SX*faceImage.cols + eyePosition.x, EYE_SY*faceImage.rows + eyePosition.y, eyePosition.width, eyePosition.height));
+	return faceImage(Rect(
+						EYE_SX*faceImage.cols + eyePosition.x, 
+						EYE_SY*faceImage.rows * (2 - EW_RATIO) + eyePosition.y * (2 - EW_RATIO),
+						eyePosition.width, 
+						eyePosition.height * EW_RATIO
+						));
 }
 
 

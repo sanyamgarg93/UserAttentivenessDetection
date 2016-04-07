@@ -99,7 +99,7 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 Point EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {		
 	centerWrtFrame.x = facePos.x + EYE_SX*facePos.width + eyePos.x + eyeCenterPos.x;
-	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
+	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height * (2-EW_RATIO) + eyePos.y * (2-EW_RATIO) + eyeCenterPos.y;
 
 	//line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
 	//line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);
@@ -110,7 +110,7 @@ Point EyeCenterTracker::drawLeftEyeCenter(Mat frame, Rect facePos, Rect eyePos, 
 Point EyeCenterTracker::drawRightEyeCenter(Mat frame, Rect facePos, Rect eyePos, Point eyeCenterPos)
 {
 	centerWrtFrame.x = facePos.x + (1 - EYE_SX - EYE_SW)*facePos.width + eyePos.x + eyeCenterPos.x;
-	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height + eyePos.y + eyeCenterPos.y;
+	centerWrtFrame.y = facePos.y + EYE_SY*facePos.height * (2-EW_RATIO) + eyePos.y * (2-EW_RATIO) + eyeCenterPos.y;
 
 	//line(frame, Point(centerWrtFrame.x - 0.30*facePos.width / 15, centerWrtFrame.y), Point(centerWrtFrame.x + 0.30*facePos.width / 15, centerWrtFrame.y), Scalar(255, 255, 255), 1, 8);
 	//line(frame, Point(centerWrtFrame.x, centerWrtFrame.y - 0.30*facePos.height / 15), Point(centerWrtFrame.x, centerWrtFrame.y + 0.30*facePos.height / 15), Scalar(255, 255, 255), 1, 8);		
@@ -132,8 +132,8 @@ Point EyeCenterTracker::drawRightEyeCenter(Mat frame, Point eyeCenterPos, int ra
 {
 	//circle(frame, eyeCenterPos, radius, Scalar(0, 255, 0), 1, 8);
 
-	line(frame, Point(eyeCenterPos.x - radius/2, eyeCenterPos.y), Point(eyeCenterPos.x + radius/2, eyeCenterPos.y), Scalar(0, 255, 0), 1, 8);
-	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius/2), Point(eyeCenterPos.x, eyeCenterPos.y + radius/2), Scalar(0, 255, 0), 1, 8);
+	line(frame, Point(eyeCenterPos.x - radius/2, eyeCenterPos.y), Point(eyeCenterPos.x + radius/2, eyeCenterPos.y), Scalar(255, 255, 255), 1, 8);
+	line(frame, Point(eyeCenterPos.x, eyeCenterPos.y - radius/2), Point(eyeCenterPos.x, eyeCenterPos.y + radius/2), Scalar(255, 255, 255), 1, 8);
 
 	return eyeCenterPos;
 }

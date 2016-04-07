@@ -88,7 +88,7 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 		if (radiiTotal >= 3)
 			break;
 
-		if (count > 20)
+		if (count > 15)
 			break;
 
 		positions[count] = pos;
