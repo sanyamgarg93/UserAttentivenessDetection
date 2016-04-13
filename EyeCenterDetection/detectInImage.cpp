@@ -36,39 +36,39 @@ void detectInImage(Mat frame)
 		//Left Eye Processing
 		for (int j = 0; j < leftEyePos.size(); j++)
 		{
-			//3. Draw detected eyes
-			eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos[j]);			
-
-			//4. Run eye center tracker on each eye region (if found)			
+			//3. Run eye center tracker on each eye region (if found)			
 			Mat leftEyeImage = eyeDetection.returnLeftEyeImage(face, leftEyePos[j]);
+						
+			eyeCornerDetector.returnLeftCornerPos(leftEyeImage, "Left");
+			eyeCornerDetector.returnRightCornerPos(leftEyeImage, "Left");
+					
 			Point eyeCenterLeft = eyeCenterTracker.estimateEyeCenter(leftEyeImage, "Left");
-			Point leftEyeCenterPosition = eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], eyeCenterLeft);
+			Point leftEyeCenterInitial = eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], eyeCenterLeft);
 
-			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*R_RATIO;			
-			int  center_initial_left_frame[2] = { leftEyeCenterPosition.x, leftEyeCenterPosition.y };
-
-			snakuscule.runSnakuscule(frame, center_initial_left_frame, &radius_left);
-			Point center_new_left; center_new_left.x = center_initial_left_frame[0]; center_new_left.y = center_initial_left_frame[1];
-			
-			eyeCenterTracker.drawRightEyeCenter(frame, center_new_left, radius_left);
+			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*R_RATIO;						
+			Point leftEyeCenterFinal= snakuscule.runSnakuscule(frame, leftEyeCenterInitial, &radius_left);
+						
+			//4. Draw detected eyes and eye centers
+			eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos[j]);
+			eyeCenterTracker.drawRightEyeCenter(frame, leftEyeCenterFinal, radius_left);			
 		}
 
 		//Right Eye Processing
 		for (int j = 0; j < rightEyePos.size(); j++)
 		{
-			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
-
 			Mat rightEyeImage = eyeDetection.returnRightEyeImage(face, rightEyePos[j]);
+
+			eyeCornerDetector.returnLeftCornerPos(rightEyeImage, "Right");
+			eyeCornerDetector.returnRightCornerPos(rightEyeImage, "Right");
+
 			Point eyeCenterRight = eyeCenterTracker.estimateEyeCenter(rightEyeImage, "Right");
-			Point rightEyeCenterPosition = eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], eyeCenterRight);		
+			Point rightEyeCenterInitial = eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], eyeCenterRight);		
 
 			int radius_right = (rightEyeImage.cols + rightEyeImage.rows)*R_RATIO;
-			int center_initial_right_frame[2] = { rightEyeCenterPosition.x, rightEyeCenterPosition.y};
+			Point rightEyeCenterFinal = snakuscule.runSnakuscule(frame, rightEyeCenterInitial, &radius_right);
 			
-			snakuscule.runSnakuscule(frame, center_initial_right_frame, &radius_right);
-			Point center_new_right; center_new_right.x = center_initial_right_frame[0]; center_new_right.y = center_initial_right_frame[1];
-
-			eyeCenterTracker.drawRightEyeCenter(frame, center_new_right, radius_right);
+			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
+			eyeCenterTracker.drawRightEyeCenter(frame, rightEyeCenterFinal, radius_right);
 		}
 	}
 

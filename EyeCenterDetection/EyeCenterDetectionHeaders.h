@@ -86,11 +86,22 @@ class Snakuscule
 
 public:
 	Snakuscule();
-	void runSnakuscule(Mat, int *, int *);
+	Point runSnakuscule(Mat, Point, int *);
 	float snakeEnergy(Mat, int, float, int, int);
 	float outerAnnulusEnergy(Mat, int, float alpha, int *);
 	float innerCircleEnergy(Mat, int, int, int);
 	float hashEnergy(Mat, int, int, int);
+};
+
+class EyeCornerDetector
+{
+	Mat erosionElement;
+	float CORNER_H, CORNER_W, CORNER_X, CORNER_Y;
+public:
+	EyeCornerDetector();
+	Mat detectHarrisCorners(Mat);
+	Point returnLeftCornerPos(Mat, string);
+	Point returnRightCornerPos(Mat, string);
 };
 
 //Methods
@@ -102,5 +113,6 @@ extern EyeDetection eyeDetection;
 extern ImageProcessingMethods imageProcessingMethods;
 extern EyeCenterTracker eyeCenterTracker;
 extern Snakuscule snakuscule;
+extern EyeCornerDetector eyeCornerDetector;
 
 #endif

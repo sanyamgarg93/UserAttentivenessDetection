@@ -19,7 +19,7 @@ float Snakuscule::hashEnergy(Mat grayFrame, int center_x, int center_y, int radi
 	return hashTable[center_x][center_y][radius];
 }
 
-void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
+Point Snakuscule::runSnakuscule(Mat frame, Point centerEstimate, int * radius)
 {	
 	Mat grayFrame = imageProcessingMethods.RGB2GRAY(frame);
 		
@@ -28,6 +28,7 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 	int radiiTotal = 0;
 	int count = 0;
 	memset(positions, 0, sizeof(positions));
+	int center[2] = {centerEstimate.x, centerEstimate.y};
 
 	for (int x = 0; x < hashChanges.size(); x++)
 	{
@@ -88,7 +89,7 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 		if (radiiTotal >= 3)
 			break;
 
-		if (count > 15)
+		if (count > 10)
 			break;
 
 		positions[count] = pos;
@@ -101,6 +102,7 @@ void Snakuscule::runSnakuscule(Mat frame, int * center, int * radius)
 		
 		count++;
 	}
+	return Point(center[0], center[1]);
 }
 
 float Snakuscule::snakeEnergy(Mat image, int innerRadius, float alpha, int center_x, int center_y)

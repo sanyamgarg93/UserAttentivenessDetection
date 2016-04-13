@@ -71,7 +71,7 @@ Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 	erode(eyeImageTrial, eyeImageTrial, Mat());
 	
 	int min = 255, xPos = 0, yPos = 0;
-	for (int i = 0; i < eyeImageTrial.rows; i++)
+	for (int i = eyeImageTrial.rows * 5 / 100; i < 95 * eyeImageTrial.rows / 100; i++)
 	{	
 		for (int j = eyeImageTrial.cols * 5 / 100; j < 95 * eyeImageTrial.cols / 100; j++)
 		{

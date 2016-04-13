@@ -6,6 +6,7 @@ EyeDetection eyeDetection;
 ImageProcessingMethods imageProcessingMethods;
 EyeCenterTracker eyeCenterTracker;
 Snakuscule snakuscule;
+EyeCornerDetector eyeCornerDetector;
 
 int main()
 {

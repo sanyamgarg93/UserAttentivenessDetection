@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="detectInImage.cpp" />
     <ClCompile Include="EyeCenterTracker.cpp" />
+    <ClCompile Include="EyeCornerDetector.cpp" />
     <ClCompile Include="EyeDetection.cpp" />
     <ClCompile Include="FaceDetection.cpp" />
     <ClCompile Include="ImageProcessingMethods.cpp" />

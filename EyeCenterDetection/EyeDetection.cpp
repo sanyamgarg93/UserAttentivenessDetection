@@ -4,9 +4,11 @@
 EyeDetection::EyeDetection()
 {
 	string leftEyeCascadeFilename = "DetectionCascades\\haarcascade_lefteye_2splits.xml";
+	//string leftEyeCascadeFilename = "DetectionCascades\\haarcascade_eye_tree_eyeglasses.xml";
 	leftEyeDetector.load(leftEyeCascadeFilename);
 
 	string rightEyeCascadeFilename = "DetectionCascades\\haarcascade_righteye_2splits.xml";
+	//string rightEyeCascadeFilename = "DetectionCascades\\haarcascade_eye_tree_eyeglasses.xml";
 	rightEyeDetector.load(rightEyeCascadeFilename);	
 
 	searchScaleFactor = 1.1; 
