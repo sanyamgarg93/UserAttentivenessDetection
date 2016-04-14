@@ -1,35 +1,17 @@
 #include "EyeCenterDetectionHeaders.h"
+#include "constants.h"
 
 EyeCornerDetector::EyeCornerDetector()
 {
-	int erosion_type = 0, erosion_elem = 1, erosion_size = 2;
-	if (erosion_elem == 0)
-		erosion_type = MORPH_RECT; 
-	else if (erosion_elem == 1)
-		erosion_type = MORPH_CROSS; 
-	else if (erosion_elem == 2) 
-		erosion_type = MORPH_ELLIPSE; 
+	eyeCornerThresh = 0.30;
 
-	erosionElement = getStructuringElement(erosion_type, Size(2 * erosion_size + 1, 2 * erosion_size + 1),	Point(erosion_size, erosion_size));
+	int erosion_type = 0, erosion_elem = 0, erosion_size = 1;
 
-	CORNER_W = 0.25; CORNER_X = 0.05; CORNER_Y = 0.25;
-}
+	if (erosion_elem == 0) erosion_type = MORPH_RECT; 
+	else if (erosion_elem == 1)	erosion_type = MORPH_CROSS; 
+	else if (erosion_elem == 2)	erosion_type = MORPH_ELLIPSE; 
 
-Mat EyeCornerDetector::detectHarrisCorners(Mat rgbImage)
-{
-	Mat image = imageProcessingMethods.RGB2GRAY(rgbImage);
-
-	imshow("Left Eye Image", image);
-
-	Mat cornerStrength;
-	cornerHarris(image, cornerStrength, 3, 3, 0.01);
-
-	Mat harrisCorners;
-	threshold(cornerStrength, harrisCorners, 0.0001, 255, CV_THRESH_BINARY);
-
-	namedWindow("Eye Corners", CV_WINDOW_AUTOSIZE);
-	imshow("Eye Corners", harrisCorners);
-	return harrisCorners;
+	erosionElement = getStructuringElement(erosion_type, Size(2 * erosion_size + 1, 2 * erosion_size + 1),	Point(erosion_size, erosion_size));	
 }
 
 Point EyeCornerDetector::returnLeftCornerPos(Mat eyeImage, string caption)
@@ -42,10 +24,16 @@ Point EyeCornerDetector::returnLeftCornerPos(Mat eyeImage, string caption)
 										));
 	
 	Mat leftCornerGray = imageProcessingMethods.RGB2GRAY(leftCornerImage);
-	threshold(leftCornerGray, leftCornerGray, 0, 255, CV_THRESH_OTSU | CV_THRESH_BINARY_INV);
+	blur(leftCornerGray, leftCornerGray, Size(3, 3));
+
+	//namedWindow("Eye: " + caption + " Corner: L Color", CV_WINDOW_AUTOSIZE);
+	//imshow("Eye: " + caption + " Corner: L Color", leftCornerGray);
+
+	leftCornerGray = imageProcessingMethods.AdaptiveHistThresh(leftCornerGray, eyeCornerThresh);
+	//threshold(leftCornerGray, leftCornerGray, 0, 255, CV_THRESH_OTSU | CV_THRESH_BINARY_INV);
 	
-	erode(leftCornerGray, leftCornerGray, erosionElement);
-	//imshow("Left Eye Otsu " + caption, leftCornerGray);
+	erode(leftCornerGray, leftCornerGray, Mat());
+	//imshow("Eye: " + caption + " Corner: L", leftCornerGray);
 
 	//Find left most point of the white blob
 	Point leftCornerPos = Point(leftCornerGray.cols, leftCornerGray.rows);
@@ -61,12 +49,8 @@ Point EyeCornerDetector::returnLeftCornerPos(Mat eyeImage, string caption)
 			}
 		}
 	}
-
-	circle(leftCornerImage, leftCornerPos, 2, Scalar(255, 255, 255));
-	//namedWindow("Left Eye Corner " + caption, CV_WINDOW_AUTOSIZE);
-	//imshow("Left Eye Corner " + caption, leftCornerImage);
-
-	return leftCornerPos;
+	
+	return Point(leftCornerPos.x + eyeImage.cols*CORNER_X, leftCornerPos.y + eyeImage.rows*CORNER_Y);
 }
 
 Point EyeCornerDetector::returnRightCornerPos(Mat eyeImage, string caption)
@@ -79,14 +63,20 @@ Point EyeCornerDetector::returnRightCornerPos(Mat eyeImage, string caption)
 										));
 	
 	Mat rightCornerGray = imageProcessingMethods.RGB2GRAY(rightCornerImage);
-	threshold(rightCornerGray, rightCornerGray, 0, 255, THRESH_OTSU | CV_THRESH_BINARY_INV);
+	blur(rightCornerGray, rightCornerGray, Size(3, 3));
 
-	erode(rightCornerGray, rightCornerGray, erosionElement);
-	//imshow("Right Eye Otsu " + caption, rightCornerGray);
+	//namedWindow("Eye: " + caption + " Corner: R Color", CV_WINDOW_AUTOSIZE);
+	//imshow("Eye: " + caption + " Corner: R Color", rightCornerGray);
 
-	//Find right most point of the white blob
+	rightCornerGray = imageProcessingMethods.AdaptiveHistThresh(rightCornerGray, eyeCornerThresh);
+	//threshold(rightCornerGray, rightCornerGray, 0, 255, THRESH_OTSU | CV_THRESH_BINARY_INV);
+
+	erode(rightCornerGray, rightCornerGray, Mat());
+	//imshow("Eye: " + caption + " Corner: R", rightCornerGray);
+
+	//Find right most point of the white blob	
+
 	Point rightCornerPos = Point(0, 0);
-
 	for (int i = 0; i < rightCornerGray.rows; i++)
 	{
 		for (int j = 0; j < rightCornerGray.cols; j++)
@@ -98,10 +88,28 @@ Point EyeCornerDetector::returnRightCornerPos(Mat eyeImage, string caption)
 			}
 		}
 	}
+	
+	return Point(rightCornerPos.x + eyeImage.cols*(1-CORNER_X-CORNER_W), rightCornerPos.y + eyeImage.rows*CORNER_Y);
+}
 
-	circle(rightCornerImage, rightCornerPos, 2, Scalar(255, 255, 255));
-	//namedWindow("Right Eye Corner " + caption, CV_WINDOW_AUTOSIZE);
-	//imshow("Right Eye Corner " + caption, rightCornerImage);
+Point EyeCornerDetector::drawLeftEyeCorner(Mat frame, Rect facePos, Rect eyePos, Point eyeCornerPos)
+{
+	Point cornerWrtFrame;
+	cornerWrtFrame.x = facePos.x + EYE_SX*facePos.width + eyePos.x + eyeCornerPos.x;
+	cornerWrtFrame.y = facePos.y + EYE_SY*facePos.height * (2 - EW_RATIO) + eyePos.y * (2 - EW_RATIO) + eyeCornerPos.y;
 
-	return rightCornerPos;
+	circle(frame, cornerWrtFrame, 4, Scalar(255, 255, 255));
+
+	return cornerWrtFrame;
+}
+
+Point EyeCornerDetector::drawRightEyeCorner(Mat frame, Rect facePos, Rect eyePos, Point eyeCornerPos)
+{
+	Point cornerWrtFrame;
+	cornerWrtFrame.x = facePos.x + (1-EYE_SX-EYE_SW)*facePos.width + eyePos.x + eyeCornerPos.x;
+	cornerWrtFrame.y = facePos.y + EYE_SY*facePos.height * (2 - EW_RATIO) + eyePos.y * (2 - EW_RATIO) + eyeCornerPos.y;
+
+	circle(frame, cornerWrtFrame, 4, Scalar(255, 255, 255));
+
+	return cornerWrtFrame;
 }

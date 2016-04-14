@@ -56,10 +56,8 @@ public:
 };
 
 class EyeCenterTracker
-{
-	int histR[256]; float cumHistR[256];
-	Point centerWrtEyeImage;	
-	Point centerWrtFrame;
+{	
+	Point centerWrtEyeImage, centerWrtFrame;
 
 public:
 	EyeCenterTracker();
@@ -72,9 +70,13 @@ public:
 
 class ImageProcessingMethods
 {
+	int histR[256]; float cumHistR[256];
+
 public:
+	ImageProcessingMethods();
 	Mat sizeReduce(Mat, int);
 	Mat RGB2GRAY(Mat);
+	Mat AdaptiveHistThresh(Mat, float);
 };
 
 class Snakuscule
@@ -95,13 +97,15 @@ public:
 
 class EyeCornerDetector
 {
-	Mat erosionElement;
-	float CORNER_H, CORNER_W, CORNER_X, CORNER_Y;
+	Mat erosionElement;	
+	float eyeCornerThresh;
+	
 public:
-	EyeCornerDetector();
-	Mat detectHarrisCorners(Mat);
+	EyeCornerDetector();	
 	Point returnLeftCornerPos(Mat, string);
 	Point returnRightCornerPos(Mat, string);
+	Point drawLeftEyeCorner(Mat, Rect, Rect, Point);
+	Point drawRightEyeCorner(Mat, Rect, Rect, Point);
 };
 
 //Methods

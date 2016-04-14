@@ -9,5 +9,6 @@ const float R_RATIO = 0.09;
 const float EW_RATIO = 0.60; //Eye width ratio
 //const float EYE_SX = 0.0, EYE_SY = 0.0, EYE_SH = 0.50, EYE_SW = 0.50;
 
+const float CORNER_W = 0.25, CORNER_X = 0.05, CORNER_Y = 0.30;
 
 #endif

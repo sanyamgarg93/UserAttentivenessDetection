@@ -8,66 +8,14 @@
 */
 EyeCenterTracker::EyeCenterTracker()
 {
-	histR[256] = { 0 };
-	float cumHistR[256] = { 0 };
-	Point centerWrtEyeImage; Point centerWrtFrame;
+	Point centerWrtEyeImage, centerWrtFrame;
 }
 
 Point EyeCenterTracker::estimateEyeCenter(Mat eyeImageRGB, string eyeCaption)
 {
-	//Convert to grayscale
 	Mat eyeImage = imageProcessingMethods.RGB2GRAY(eyeImageRGB);
-	
-	//Step-1: Create histogram of the eye region
-	
-	memset(histR, 0, sizeof(histR));
-	//int histR[256] = { 0 };
-	for (int i = 0; i < eyeImage.rows; i++)
-	{
-		for (int j = 0; j < eyeImage.cols; j++)
-		{
-			histR[eyeImage.at<uchar>(i, j)]++;
-		}
-	}
-
-	//Step-2: Create cumulative histograms
-
-	memset(cumHistR, 0, sizeof(cumHistR));
-	//float cumHistR[256] = { 0 };
-	for (int i = 0; i < 256; i++)
-	{
-		int sum = 0;
-		for (int j = 0; j <= i; j++)
-		{
-			sum = sum + histR[j];
-		}
-		cumHistR[i] = sum;
-	}
-
-	//Step-3: Normalize cumulative histogram within 0.0 to 1.0
-
-	int maxNew = cumHistR[255];
-
-	for (int i = 0; i < 256; i++)
-		cumHistR[i] = float(cumHistR[i]) / maxNew;
-
-	//Step-4: Threshold image based on histogram
-
-	Mat eyeImageTrial(Size(eyeImage.cols, eyeImage.rows), CV_8U);
-
-	for (int i = 0; i < eyeImage.rows; i++)
-	{
-		for (int j = 0; j < eyeImage.cols; j++)
-		{
-			if (cumHistR[eyeImage.at<uchar>(i, j)] <= 0.05)
-				eyeImageTrial.at<uchar>(i, j) = 255;
-			else
-				eyeImageTrial.at<uchar>(i, j) = 0;
-		}
-	}
-
-	//Step-5: Choose the darkest pixel among thresholded pixels
-	
+	Mat eyeImageTrial = imageProcessingMethods.AdaptiveHistThresh(eyeImage, 0.05);
+		
 	erode(eyeImageTrial, eyeImageTrial, Mat());
 	
 	int min = 255, xPos = 0, yPos = 0;
