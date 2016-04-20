@@ -10,8 +10,9 @@ EyeCornerDetector eyeCornerDetector;
 
 int main()
 {
-	//VideoCapture capture(0);
-	VideoCapture capture("talking_face.avi");
+	//VideoCapture capture(0); //Webcam Input
+	VideoCapture capture("talking_face.avi");	//Talking Face Database
+	//VideoCapture capture("D:/Face Detection Databases/BioID/BioID_%d.jpg"); //BioID Database
 	if (!capture.isOpened())
 	{
 		cout << "Camera/File not found" << endl;
@@ -29,6 +30,8 @@ int main()
 			break;
 		}
 
+		//pyrUp(frame, frame, Size());
+
 		//Limit frame size to maximum 640 pixels width.
 		if (frame.cols > 640);
 			frame = imageProcessingMethods.sizeReduce(frame, 640);
@@ -40,6 +43,9 @@ int main()
 				
 		//Display output detections
 		imshow("Output", frame);
+		//waitKey(0);
+
+		//destroyAllWindows();
 		if (waitKey(10) == 27)
 			break;		
 	}	

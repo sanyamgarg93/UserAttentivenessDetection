@@ -6,7 +6,7 @@ void detectInImage(Mat frame)
 	//Reduce Image Size
 	Mat smallerFrame = imageProcessingMethods.sizeReduce(frame, SMALLER_DETECTION_WIDTH);
 	float scale = float(frame.cols) / SMALLER_DETECTION_WIDTH; 
-	
+
 	//Detect faces in smaller image
 	vector<Rect> frontalFaces = faceDetection.storeFrontalFacePos(smallerFrame);
 	
@@ -28,7 +28,7 @@ void detectInImage(Mat frame)
 		//1. Extract the face
 		Rect faceRect(frontalFaces[i].x, frontalFaces[i].y, frontalFaces[i].width, frontalFaces[i].height);
 		Mat face = frame(faceRect);
-		
+			
 		//2. Run eye detector on the face
 		vector<Rect> leftEyePos = eyeDetection.storeLeftEyePos(face);
 		vector<Rect> rightEyePos = eyeDetection.storeRightEyePos(face);
@@ -50,7 +50,7 @@ void detectInImage(Mat frame)
 						
 			//4. Draw detected eyes and eye centers
 			eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], leftCorner);
-			eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], rightCorner);
+			//eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], rightCorner);
 			eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos[j]);
 			eyeCenterTracker.drawRightEyeCenter(frame, leftEyeCenterFinal, radius_left);			
 		}
@@ -69,7 +69,7 @@ void detectInImage(Mat frame)
 			Point leftCorner = eyeCornerDetector.returnLeftCornerPos(rightEyeImage, "R");
 			Point rightCorner = eyeCornerDetector.returnRightCornerPos(rightEyeImage, "R");
 
-			eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], leftCorner);
+			//eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], leftCorner);
 			eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], rightCorner);
 			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
 			eyeCenterTracker.drawRightEyeCenter(frame, rightEyeCenterFinal, radius_right);

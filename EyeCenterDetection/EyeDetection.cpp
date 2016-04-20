@@ -12,7 +12,7 @@ EyeDetection::EyeDetection()
 	rightEyeDetector.load(rightEyeCascadeFilename);	
 
 	searchScaleFactor = 1.1; 
-	minNeighbourCount = 2; 
+	minNeighbourCount = 3; 
 	searchFlags = CASCADE_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH; //This combination of flags terminates the search at whatever scale the first candidate is found.
 	minSearchSize = Size(10, 10);
 }

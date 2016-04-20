@@ -17,6 +17,8 @@
 #include<opencv2\imgproc.hpp>
 #include<array>
 
+//#define SHOW_WINDOWS 1
+
 //Namespaces
 using namespace std;
 using namespace cv;
