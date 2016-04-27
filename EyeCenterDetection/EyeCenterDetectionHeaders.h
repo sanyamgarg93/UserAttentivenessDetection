@@ -110,6 +110,22 @@ public:
 	Point drawRightEyeCorner(Mat, Rect, Rect, Point);
 };
 
+class EyeGazeEstimator
+{
+private:
+	//int cornerDistance;
+	float distanceBw2Points(Point, Point);
+	float perpDistanceFromLine(Point, Point, Point);
+	
+public:
+	EyeGazeEstimator();
+	int eyeCornerDistance(Mat, Point, Point);
+	int eyeCornerDistance(Point, Point);
+	float verticalShift(Point, Point, Point, Point);
+	float horizontalShift(Point, Point, Point, Point);
+	
+};
+
 //Methods
 void detectInImage(Mat);
 
@@ -120,5 +136,6 @@ extern ImageProcessingMethods imageProcessingMethods;
 extern EyeCenterTracker eyeCenterTracker;
 extern Snakuscule snakuscule;
 extern EyeCornerDetector eyeCornerDetector;
+extern EyeGazeEstimator eyeGazeEstimator;
 
 #endif

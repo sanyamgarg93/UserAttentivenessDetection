@@ -88,6 +88,7 @@
     <ClCompile Include="EyeCenterTracker.cpp" />
     <ClCompile Include="EyeCornerDetector.cpp" />
     <ClCompile Include="EyeDetection.cpp" />
+    <ClCompile Include="eyeGazeEstimator.cpp" />
     <ClCompile Include="FaceDetection.cpp" />
     <ClCompile Include="ImageProcessingMethods.cpp" />
     <ClCompile Include="main.cpp" />

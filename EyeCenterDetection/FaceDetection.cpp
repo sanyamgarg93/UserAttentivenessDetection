@@ -1,7 +1,5 @@
 #include "EyeCenterDetectionHeaders.h"
 
-//CascadeClassifier frontalFaceDetector;
-
 FaceDetection::FaceDetection()
 {
 	string frontalFaceCascadeFilename = "DetectionCascades\\lbpcascade_frontalface.xml";
@@ -10,13 +8,13 @@ FaceDetection::FaceDetection()
 	searchScaleFactor = 1.2f;				// Scale density.
 	minNeighbourCount = 2;					// Reliability vs many faces
 	searchFlags = CV_HAAR_DO_CANNY_PRUNING; // Search for many faces. CV_HAAR_DO_CANNY_PRUNING skips areas without many lines.
-	minSearchSize = Size(10, 10);			// Smallest face size.
+	minSearchSize = Size(10,10);				// Smallest face size.
 }
 
 vector<Rect> FaceDetection::storeFrontalFacePos(Mat image)
 {	
-	minSearchSize.height = image.cols / 5; 
-	minSearchSize.width = image.cols / 5; 
+	minSearchSize.height = image.cols / 10; 
+	minSearchSize.width = image.cols / 10; 
 
 	vector<Rect> faces;
 	frontalFaceDetector.detectMultiScale(	

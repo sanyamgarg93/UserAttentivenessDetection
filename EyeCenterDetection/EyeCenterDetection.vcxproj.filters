@@ -42,6 +42,9 @@
     <ClCompile Include="EyeCornerDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="eyeGazeEstimator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EyeCenterDetectionHeaders.h">

@@ -33,6 +33,11 @@ void detectInImage(Mat frame)
 		vector<Rect> leftEyePos = eyeDetection.storeLeftEyePos(face);
 		vector<Rect> rightEyePos = eyeDetection.storeRightEyePos(face);
 
+		Point rightEyeCenterFinal = Point(0, 0);
+		Point leftEyeCenterFinal = Point(0, 0);
+		Point leftEyeLeftCorner = Point(0, 0);
+		Point rightEyeRightCorner = Point(0, 0); 
+
 		//Left Eye Processing
 		for (int j = 0; j < leftEyePos.size(); j++)
 		{
@@ -43,14 +48,14 @@ void detectInImage(Mat frame)
 			Point leftEyeCenterInitial = eyeCenterTracker.drawLeftEyeCenter(frame, frontalFaces[i], leftEyePos[j], eyeCenterLeft);
 
 			int radius_left = (leftEyeImage.cols + leftEyeImage.rows)*R_RATIO;						
-			Point leftEyeCenterFinal= snakuscule.runSnakuscule(frame, leftEyeCenterInitial, &radius_left);
+			leftEyeCenterFinal= snakuscule.runSnakuscule(frame, leftEyeCenterInitial, &radius_left);
 						
 			Point leftCorner = eyeCornerDetector.returnLeftCornerPos(leftEyeImage, "L");
 			Point rightCorner = eyeCornerDetector.returnRightCornerPos(leftEyeImage, "L");
 						
 			//4. Draw detected eyes and eye centers
-			eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], leftCorner);
-			//eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], rightCorner);
+			leftEyeLeftCorner = eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], leftCorner);
+			//Point leftEyeRightCorner = eyeCornerDetector.drawLeftEyeCorner(frame, frontalFaces[i], leftEyePos[j], rightCorner);
 			eyeDetection.drawLeftEyeOnImage(frame, frontalFaces[i], leftEyePos[j]);
 			eyeCenterTracker.drawRightEyeCenter(frame, leftEyeCenterFinal, radius_left);			
 		}
@@ -64,18 +69,37 @@ void detectInImage(Mat frame)
 			Point rightEyeCenterInitial = eyeCenterTracker.drawRightEyeCenter(frame, frontalFaces[i], rightEyePos[j], eyeCenterRight);		
 
 			int radius_right = (rightEyeImage.cols + rightEyeImage.rows)*R_RATIO;
-			Point rightEyeCenterFinal = snakuscule.runSnakuscule(frame, rightEyeCenterInitial, &radius_right);
+			rightEyeCenterFinal = snakuscule.runSnakuscule(frame, rightEyeCenterInitial, &radius_right);
 			
 			Point leftCorner = eyeCornerDetector.returnLeftCornerPos(rightEyeImage, "R");
 			Point rightCorner = eyeCornerDetector.returnRightCornerPos(rightEyeImage, "R");
 
-			//eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], leftCorner);
-			eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], rightCorner);
+			//Point rightEyeLeftCorner = eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], leftCorner);
+			rightEyeRightCorner = eyeCornerDetector.drawRightEyeCorner(frame, frontalFaces[i], rightEyePos[j], rightCorner);
 			eyeDetection.drawRightEyeOnImage(frame, frontalFaces[i], rightEyePos[j]);
 			eyeCenterTracker.drawRightEyeCenter(frame, rightEyeCenterFinal, radius_right);
 		}
-	}
+		
 
+		//Detect eye gaze for each face only if eye corners and eye centers have been found.
+		if (rightEyeRightCorner != Point(0, 0) && leftEyeLeftCorner != Point(0, 0))
+		{
+			//1. Find distance between the eye corners for normalization. Note it as 'C'. Draw the connecting line.
+			int cornerDist = eyeGazeEstimator.eyeCornerDistance(frame, leftEyeLeftCorner, rightEyeRightCorner);
+
+			//3. Find average perpendicular distance of the eye centers from this line. This will tell us if the user is looking up or down.
+			float horizontalShift = eyeGazeEstimator.horizontalShift(leftEyeCenterFinal, rightEyeCenterFinal, leftEyeLeftCorner, rightEyeRightCorner) / cornerDist;
+			cout << "Horizontal Shift: " << horizontalShift << endl;
+
+			//4. a) Calculate distance of left eye corner from left iris. Note it as 'D1' 
+			//   b) Calculate distance of right eye corner from right iris. Not it as 'D2'
+			//   c) Looking left and right can be evaluated by calculating (D1-D2)/C. The sign will give the direction. Magnitude will give the angle.  
+			float verticalShift = eyeGazeEstimator.verticalShift(leftEyeCenterFinal, rightEyeCenterFinal, leftEyeLeftCorner, rightEyeRightCorner) / cornerDist;
+			cout << "Vertical Shift: " << verticalShift << endl;
+
+			//5. Place the face in the center of the screen. Ask user to look in 4 directions. 
+		}
+	}
 	//Draw faces
 	faceDetection.drawFaceOnImage(frame, frontalFaces);
 }

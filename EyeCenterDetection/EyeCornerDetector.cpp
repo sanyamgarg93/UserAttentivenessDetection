@@ -4,7 +4,6 @@
 EyeCornerDetector::EyeCornerDetector()
 {
 	eyeCornerThresh = 0.15;
-
 	int erosion_type = 0, erosion_elem = 0, erosion_size = 1;
 
 	if (erosion_elem == 0) erosion_type = MORPH_RECT; 
@@ -26,15 +25,12 @@ Point EyeCornerDetector::returnLeftCornerPos(Mat eyeImage, string caption)
 	Mat leftCornerGray = imageProcessingMethods.RGB2GRAY(leftCornerImage);
 	blur(leftCornerGray, leftCornerGray, Size(3, 3));
 
-#ifdef SHOW_WINDOWS
-	namedWindow("Eye: " + caption + " Corner: L Color", CV_WINDOW_AUTOSIZE);
-	imshow("Eye: " + caption + " Corner: L Color", leftCornerGray);		
-#endif
-
 	Mat leftCornerBW = imageProcessingMethods.AdaptiveHistThresh(leftCornerGray, eyeCornerThresh);	
 	erode(leftCornerBW, leftCornerBW, erosionElement);
 
 #ifdef SHOW_WINDOWS
+	namedWindow("Eye: " + caption + " Corner: L Color", CV_WINDOW_AUTOSIZE);
+	imshow("Eye: " + caption + " Corner: L Color", leftCornerGray);	
 	imshow("Eye: " + caption + " Corner: L", leftCornerBW);
 #endif
 
@@ -93,15 +89,12 @@ Point EyeCornerDetector::returnRightCornerPos(Mat eyeImage, string caption)
 	Mat rightCornerGray = imageProcessingMethods.RGB2GRAY(rightCornerImage);
 	blur(rightCornerGray, rightCornerGray, Size(3, 3));
 
-#ifdef SHOW_WINDOWS
-	namedWindow("Eye: " + caption + " Corner: R Color", CV_WINDOW_AUTOSIZE);
-	imshow("Eye: " + caption + " Corner: R Color", rightCornerGray);
-#endif
-
 	Mat rightCornerBW = imageProcessingMethods.AdaptiveHistThresh(rightCornerGray, eyeCornerThresh);
 	erode(rightCornerBW, rightCornerBW, erosionElement);
 	
 #ifdef SHOW_WINDOWS
+	namedWindow("Eye: " + caption + " Corner: R Color", CV_WINDOW_AUTOSIZE);
+	imshow("Eye: " + caption + " Corner: R Color", rightCornerGray);
 	imshow("Eye: " + caption + " Corner: R", rightCornerBW);
 #endif
 
