@@ -1,4 +1,5 @@
 #include "EyeCenterDetectionHeaders.h"
+#include "constants.h"
 
 FaceDetection::FaceDetection()
 {
@@ -8,7 +9,7 @@ FaceDetection::FaceDetection()
 	searchScaleFactor = 1.2f;				// Scale density.
 	minNeighbourCount = 2;					// Reliability vs many faces
 	searchFlags = CV_HAAR_DO_CANNY_PRUNING; // Search for many faces. CV_HAAR_DO_CANNY_PRUNING skips areas without many lines.
-	minSearchSize = Size(10,10);				// Smallest face size.
+	minSearchSize = Size(50,50);				// Smallest face size.
 }
 
 vector<Rect> FaceDetection::storeFrontalFacePos(Mat image)
@@ -16,16 +17,38 @@ vector<Rect> FaceDetection::storeFrontalFacePos(Mat image)
 	minSearchSize.height = image.cols / 10; 
 	minSearchSize.width = image.cols / 10; 
 
-	vector<Rect> faces;
+	Mat grayFrame;
+	imageProcessingMethods.RGB2GRAY(image).copyTo(grayFrame);
+
+	//Reduce Image Size
+	Mat smallerFrame = imageProcessingMethods.sizeReduce(grayFrame, SMALLER_DETECTION_WIDTH);
+	float scale = float(image.cols) / SMALLER_DETECTION_WIDTH;
+
+	equalizeHist(smallerFrame, smallerFrame);
+
+	vector<Rect> frontalFaces;
 	frontalFaceDetector.detectMultiScale(	
-										image, 
-										faces, 
+										smallerFrame, 
+										frontalFaces, 
 										searchScaleFactor, 
 										minNeighbourCount, 
 										searchFlags, 
 										minSearchSize
 										);
-	return faces;
+
+	//Restore the face positions
+	for (int i = 0; i < (int)frontalFaces.size(); i++)
+	{
+		if (grayFrame.cols > SMALLER_DETECTION_WIDTH)
+		{
+			frontalFaces[i].x = frontalFaces[i].x*scale;
+			frontalFaces[i].y = frontalFaces[i].y*scale;
+			frontalFaces[i].width = frontalFaces[i].width*scale;
+			frontalFaces[i].height = frontalFaces[i].height*scale;
+		}
+	}
+
+	return frontalFaces;
 }
 
 void FaceDetection::drawFaceOnImage(Mat image, vector<Rect> frontalFacePositions)

@@ -23,7 +23,7 @@ Point EyeCornerDetector::returnLeftCornerPos(Mat eyeImage, string caption)
 										));
 		
 	Mat leftCornerGray = imageProcessingMethods.RGB2GRAY(leftCornerImage);
-	blur(leftCornerGray, leftCornerGray, Size(3, 3));
+	blur(leftCornerGray, leftCornerGray, Size(5, 5));
 
 	Mat leftCornerBW = imageProcessingMethods.AdaptiveHistThresh(leftCornerGray, eyeCornerThresh);	
 	erode(leftCornerBW, leftCornerBW, erosionElement);
@@ -87,7 +87,7 @@ Point EyeCornerDetector::returnRightCornerPos(Mat eyeImage, string caption)
 										));
 		
 	Mat rightCornerGray = imageProcessingMethods.RGB2GRAY(rightCornerImage);
-	blur(rightCornerGray, rightCornerGray, Size(3, 3));
+	blur(rightCornerGray, rightCornerGray, Size(5, 5));
 
 	Mat rightCornerBW = imageProcessingMethods.AdaptiveHistThresh(rightCornerGray, eyeCornerThresh);
 	erode(rightCornerBW, rightCornerBW, erosionElement);

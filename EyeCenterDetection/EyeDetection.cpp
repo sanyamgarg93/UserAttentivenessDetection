@@ -22,7 +22,9 @@ vector<Rect> EyeDetection::storeRightEyePos(Mat faceImage)
 	//Run the eye detector on Right side of face	
 	Mat topRightOfFace = faceImage(Rect((1-EYE_SX-EYE_SW)*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
 		
-	Mat topRightOfFaceGray = imageProcessingMethods.RGB2GRAY(topRightOfFace);
+	Mat topRightOfFaceGray; 
+	imageProcessingMethods.RGB2GRAY(topRightOfFace).copyTo(topRightOfFaceGray);
+	equalizeHist(topRightOfFaceGray, topRightOfFaceGray);
 	
 	vector<Rect> rightEyePos;
 	leftEyeDetector.detectMultiScale(
@@ -42,7 +44,9 @@ vector<Rect> EyeDetection::storeLeftEyePos(Mat faceImage)
 	//Run the eye detector on Left side of face
 	Mat topLeftOfFace = faceImage(Rect(EYE_SX*faceImage.cols, EYE_SY*faceImage.rows, EYE_SW*faceImage.cols, EYE_SH*faceImage.rows));
 
-	Mat topLeftOfFaceGray = imageProcessingMethods.RGB2GRAY(topLeftOfFace);
+	Mat topLeftOfFaceGray; 
+	imageProcessingMethods.RGB2GRAY(topLeftOfFace).copyTo(topLeftOfFaceGray);
+	equalizeHist(topLeftOfFaceGray, topLeftOfFaceGray);
 
 	vector<Rect> leftEyePos;
 	rightEyeDetector.detectMultiScale(

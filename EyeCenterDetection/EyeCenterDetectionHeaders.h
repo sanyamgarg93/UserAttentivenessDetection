@@ -11,6 +11,7 @@
 #include<ctime>
 #include<fstream>
 #include<limits.h>
+#include<thread>
 #include<opencv2\core.hpp>
 #include<opencv2\highgui.hpp>
 #include<opencv2\objdetect.hpp>
@@ -55,6 +56,21 @@ public:
 	void drawRightEyeOnImage(Mat, Rect, Rect);
 	Mat returnLeftEyeImage(Mat, Rect);
 	Mat returnRightEyeImage(Mat, Rect);
+};
+
+class NoseDetector
+{
+	CascadeClassifier noseDetector;
+	float searchScaleFactor;
+	int minNeighbourCount;
+	int searchFlags;
+	Size minSearchSize;
+
+public:
+	NoseDetector();
+	vector<Rect> storeNosePos(Mat);
+	void drawNoseOnImage(Mat, Rect, Rect);
+	Mat returnNoseImage(Mat, Rect);
 };
 
 class EyeCenterTracker
@@ -137,5 +153,7 @@ extern EyeCenterTracker eyeCenterTracker;
 extern Snakuscule snakuscule;
 extern EyeCornerDetector eyeCornerDetector;
 extern EyeGazeEstimator eyeGazeEstimator;
+extern NoseDetector noseDetector;
+extern float horizontalShift, verticalShift;
 
 #endif

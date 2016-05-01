@@ -21,7 +21,8 @@ float Snakuscule::hashEnergy(Mat grayFrame, int center_x, int center_y, int radi
 
 Point Snakuscule::runSnakuscule(Mat frame, Point centerEstimate, int * radius)
 {	
-	Mat grayFrame = imageProcessingMethods.RGB2GRAY(frame);
+	Mat grayFrame; 
+	imageProcessingMethods.RGB2GRAY(frame).copyTo(grayFrame);
 		
 	blur(grayFrame, grayFrame, Size(5, 5));
 	
