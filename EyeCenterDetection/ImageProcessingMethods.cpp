@@ -37,7 +37,7 @@ Mat ImageProcessingMethods::RGB2GRAY(Mat image)
 	}
 	else // Access the grayscale input image directly.
 	{		
-		gray = image; 
+		gray = image;
 	}
 	return gray;
 }

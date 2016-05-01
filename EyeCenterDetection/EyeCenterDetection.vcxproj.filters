@@ -16,6 +16,9 @@
     <Filter Include="OpenCV Detection Cascades">
       <UniqueIdentifier>{cfb04a5f-3f11-4155-83e7-fab084eb23f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenCVBin">
+      <UniqueIdentifier>{22b58b20-4ce1-4866-a319-9f11cf0ce358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -76,5 +79,25 @@
     <Xml Include="DetectionCascades\lbpcascade_frontalface.xml">
       <Filter>OpenCV Detection Cascades</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Release\opencv_world300d.dll">
+      <Filter>OpenCVBin</Filter>
+    </None>
+    <None Include="..\Release\opencv_traincascade.exe">
+      <Filter>OpenCVBin</Filter>
+    </None>
+    <None Include="..\Release\opencv_createsamples.exe">
+      <Filter>OpenCVBin</Filter>
+    </None>
+    <None Include="..\Release\opencv_annotation.exe">
+      <Filter>OpenCVBin</Filter>
+    </None>
+    <None Include="..\Release\opencv_world300.dll">
+      <Filter>OpenCVBin</Filter>
+    </None>
+    <None Include="..\Release\opencv_ffmpeg300.dll">
+      <Filter>OpenCVBin</Filter>
+    </None>
   </ItemGroup>
 </Project>

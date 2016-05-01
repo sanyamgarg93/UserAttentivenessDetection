@@ -152,7 +152,7 @@ int main()
 				
 		//Display output detections
 		imshow("Output", frame);
-		waitKey(0);
+		//waitKey(0);
 
 		//destroyAllWindows();
 		if (waitKey(5) == 27)

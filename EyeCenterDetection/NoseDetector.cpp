@@ -21,8 +21,6 @@ vector<Rect> NoseDetector::storeNosePos(Mat faceImage)
 
 	equalizeHist(centerOfFaceGray, centerOfFaceGray);
 
-	imshow("Center of Face", centerOfFaceGray);
-
 	vector<Rect> nosePos;
 	noseDetector.detectMultiScale(
 		centerOfFaceGray,
