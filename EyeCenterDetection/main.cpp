@@ -9,6 +9,7 @@ Snakuscule snakuscule;
 EyeCornerDetector eyeCornerDetector;
 EyeGazeEstimator eyeGazeEstimator;
 NoseDetector noseDetector;
+MouthDetector mouthDetector;
 
 Point2f TopRight(0, 0);
 Point2f TopLeft(0, 0);
@@ -132,8 +133,6 @@ int main()
 	while (true)
 	{	
 		frameCount++;
-		start = clock();
-
 		//Capture frames
 		if (!capture.read(frame)) 
 		{
@@ -141,24 +140,24 @@ int main()
 			break;
 		}
 		
+		start = clock();
+
 		//pyrUp(frame, frame, Size());
 
-		//Limit frame size to maximum 640 pixels width.
-		if (frame.cols > 640);
-			frame = imageProcessingMethods.sizeReduce(frame, 640);
+		////Limit frame size to maximum 640 pixels width.
+		//if (frame.cols > 640);
+		//	frame = imageProcessingMethods.sizeReduce(frame, 640);
 			
 		//Call the procedure on each frame		
 		detectInImage(frame);				
 				
 		//Display output detections
 		imshow("Output", frame);
-		//waitKey(0);
-
-		//destroyAllWindows();
+		
 		if (waitKey(5) == 27)
 			break;		
 
-		//cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
+		cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 	}	
 	
 	capture.release();

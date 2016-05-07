@@ -7,15 +7,15 @@ FaceDetection::FaceDetection()
 	frontalFaceDetector.load(frontalFaceCascadeFilename);
 
 	searchScaleFactor = 1.2f;				// Scale density.
-	minNeighbourCount = 2;					// Reliability vs many faces
+	minNeighbourCount = 3;					// Reliability vs many faces
 	searchFlags = CV_HAAR_DO_CANNY_PRUNING; // Search for many faces. CV_HAAR_DO_CANNY_PRUNING skips areas without many lines.
-	minSearchSize = Size(50,50);				// Smallest face size.
+	minSearchSize = Size(50,50);			// Smallest face size.
 }
 
 vector<Rect> FaceDetection::storeFrontalFacePos(Mat image)
 {	
-	minSearchSize.height = image.cols / 10; 
-	minSearchSize.width = image.cols / 10; 
+	minSearchSize.height = image.cols / 6; 
+	minSearchSize.width = image.cols / 6; 
 
 	Mat grayFrame;
 	imageProcessingMethods.RGB2GRAY(image).copyTo(grayFrame);

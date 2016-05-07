@@ -22,7 +22,7 @@ float EyeGazeEstimator::distanceBw2Points(Point a, Point b)
 int EyeGazeEstimator::eyeCornerDistance(Mat frame, Point leftEyeLeftCorner, Point rightEyeRightCorner)
 {
 	//Display line connecting the eye corners
-	line(frame, leftEyeLeftCorner, rightEyeRightCorner, Scalar(0, 0, 255), 1);	
+	//line(frame, leftEyeLeftCorner, rightEyeRightCorner, Scalar(0, 0, 255), 1);	
 
 	int cornerDistance = distanceBw2Points(leftEyeLeftCorner, rightEyeRightCorner);
 	return cornerDistance;

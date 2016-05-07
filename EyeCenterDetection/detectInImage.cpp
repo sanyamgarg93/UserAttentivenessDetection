@@ -73,6 +73,13 @@ void detectInImage(Mat frame)
 			noseDetector.drawNoseOnImage(frame, frontalFaces[i], nosePos[k]);
 		}
 
+		//Mouth Detection
+		vector<Rect> mouthPos = mouthDetector.storeMouthPos(face);
+		for (int k = 0; k < mouthPos.size(); k++)
+		{
+			mouthDetector.drawMouthOnImage(frame, frontalFaces[i], mouthPos[k]);
+		}
+
 		//Detect eye gaze for each face only if eye corners and eye centers have been found.
 		if (rightEyeRightCorner != Point(0, 0) && leftEyeLeftCorner != Point(0, 0))
 		{

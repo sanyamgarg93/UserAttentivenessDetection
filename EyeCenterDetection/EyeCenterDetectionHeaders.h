@@ -73,6 +73,21 @@ public:
 	Mat returnNoseImage(Mat, Rect);
 };
 
+class MouthDetector
+{
+	CascadeClassifier mouthDetector;
+	float searchScaleFactor;
+	int minNeighbourCount;
+	int searchFlags;
+	Size minSearchSize;
+
+public:
+	MouthDetector();
+	vector<Rect> storeMouthPos(Mat);
+	void drawMouthOnImage(Mat, Rect, Rect);
+	Mat returnMouthImage(Mat, Rect);
+};
+
 class EyeCenterTracker
 {	
 	Point centerWrtEyeImage, centerWrtFrame;
@@ -154,6 +169,7 @@ extern Snakuscule snakuscule;
 extern EyeCornerDetector eyeCornerDetector;
 extern EyeGazeEstimator eyeGazeEstimator;
 extern NoseDetector noseDetector;
+extern MouthDetector mouthDetector;
 extern float horizontalShift, verticalShift;
 
 #endif

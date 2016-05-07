@@ -35,4 +35,9 @@ Nose search region w.r.t. the face image
 */
 const float NOSE_SX = 0.30, NOSE_SY = 0.40, NOSE_SW = 0.40, NOSE_SH = 0.40;
 
+/*
+Mouth search region w.r.t. the face image
+*/
+const float MOUTH_SX = 0.20, MOUTH_SY = 0.50, MOUTH_SW = 0.60, MOUTH_SH = 0.40;
+
 #endif

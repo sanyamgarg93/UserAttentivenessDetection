@@ -98,6 +98,7 @@
     <ClCompile Include="FaceDetection.cpp" />
     <ClCompile Include="ImageProcessingMethods.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouthDetector.cpp" />
     <ClCompile Include="NoseDetector.cpp" />
     <ClCompile Include="Snakuscule.cpp" />
   </ItemGroup>
